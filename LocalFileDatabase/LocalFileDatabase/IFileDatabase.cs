@@ -12,13 +12,13 @@
 
         bool IsColumnNameExist(string schema, string tableName, string columnName);
 
-        bool InserData(string tableName, string titleName, string data);
+        bool InserData(string tableName, string columnName, string columnValue);
 
-        bool UpdateData(string tableName, string titleName, string data);
+        bool UpdateData(string tableName, string columnName, string columnValue);
 
-        bool DeleteData(string tableName, string titleName);
+        bool DeleteData(string tableName, string columnName);
 
-        bool SelectData(string tableName, string titleName, out string data);
+        bool SelectData(string tableName, string columnName, out string columnValue);
 
         bool CreateSchema(string tableName);
     }

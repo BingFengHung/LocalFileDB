@@ -55,14 +55,14 @@ namespace LocalFileDatabase
             }
         }
 
-        public bool DeleteData(string tableName, string titleName)
+        public bool DeleteData(string tableName, string columnName)
         {
             try
             {
                 var path = Path.Combine(SchemaName, tableName);
                 var textLines = File.ReadLines(path).ToList();
 
-                var index = textLines.IndexOf($"[{titleName}]");
+                var index = textLines.IndexOf($"[{columnName}]");
 
                 // Remove twice beacuse need to remove column value as well.
                 textLines.RemoveAt(index);
@@ -75,7 +75,7 @@ namespace LocalFileDatabase
             catch { return false; }
         }
 
-        public bool InserData(string tableName, string titleName, string data)
+        public bool InserData(string tableName, string columnName, string columnValue)
         {
             try
             {
@@ -85,8 +85,8 @@ namespace LocalFileDatabase
                 {
                     using (StreamWriter sw = File.AppendText(path))
                     {
-                        sw.WriteLine($"[{titleName}]");
-                        sw.WriteLine(data);
+                        sw.WriteLine($"[{columnName}]");
+                        sw.WriteLine(columnValue);
                     }
                 }
 
@@ -112,9 +112,9 @@ namespace LocalFileDatabase
             return Directory.Exists(schemaName);
         }
 
-        public bool SelectData(string tableName, string titleName, out string data)
+        public bool SelectData(string tableName, string columnName, out string columnValue)
         {
-            data = string.Empty;
+            columnValue = string.Empty;
 
             try
             {
@@ -125,23 +125,23 @@ namespace LocalFileDatabase
 
                 var index = textLines.IndexOf($"{textLines}");
 
-                data = textLines[index + 1];
+                columnValue = textLines[index + 1];
 
                 return true;
             }
             catch { return false; }
         }
 
-        public bool UpdateData(string tableName, string titleName, string data)
+        public bool UpdateData(string tableName, string columnName, string columnValue)
         {
             var path = Path.Combine(SchemaName, tableName);
 
             var textLines = File.ReadLines(path).ToList();
 
-            var index = textLines.IndexOf($"[{titleName}]");
+            var index = textLines.IndexOf($"[{columnName}]");
 
             textLines.RemoveAt(index + 1);
-            textLines.Insert(index + 1, data);
+            textLines.Insert(index + 1, columnValue);
             File.WriteAllLines(path, textLines);
 
             return true;
