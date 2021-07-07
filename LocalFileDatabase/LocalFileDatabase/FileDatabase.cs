@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 
 namespace LocalFileDatabase
 {
@@ -54,29 +55,96 @@ namespace LocalFileDatabase
             }
         }
 
-        public bool DeleteData(string tableName)
+        public bool DeleteData(string tableName, string titleName)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var path = Path.Combine(SchemaName, tableName);
+                var textLines = File.ReadLines(path).ToList();
+
+                var index = textLines.IndexOf($"[{titleName}]");
+
+                // Remove twice beacuse need to remove column value as well.
+                textLines.RemoveAt(index);
+                textLines.RemoveAt(index);
+
+                File.WriteAllLines(path, textLines);
+
+                return true;
+            }
+            catch { return false; }
         }
 
-        public bool InserData(string tableName)
+        public bool InserData(string tableName, string titleName, string data)
         {
-            throw new NotImplementedException();
+            try
+            {
+                string path = Path.Combine(SchemaName, tableName);
+
+                if (!IsColumnNameExist(SchemaName, tableName, tableName))
+                {
+                    using (StreamWriter sw = File.AppendText(path))
+                    {
+                        sw.WriteLine($"[{titleName}]");
+                        sw.WriteLine(data);
+                    }
+                }
+
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public bool IsColumnNameExist(string schema, string tableName, string columnName)
+        {
+            string path = Path.Combine(schema, tableName);
+
+            var textLines = File.ReadAllLines(path);
+
+            return textLines.Contains($"[{columnName}]");
         }
 
         public bool IsSchemaExist(string schemaName)
         {
-            throw new NotImplementedException();
+            return Directory.Exists(schemaName);
         }
 
-        public bool SelectData(string tableName)
+        public bool SelectData(string tableName, string titleName, out string data)
         {
-            throw new NotImplementedException();
+            data = string.Empty;
+
+            try
+            {
+
+                var path = Path.Combine(SchemaName, tableName);
+
+                var textLines = File.ReadLines(path).ToList();
+
+                var index = textLines.IndexOf($"{textLines}");
+
+                data = textLines[index + 1];
+
+                return true;
+            }
+            catch { return false; }
         }
 
-        public bool UpdateData(string tableName)
+        public bool UpdateData(string tableName, string titleName, string data)
         {
-            throw new NotImplementedException();
+            var path = Path.Combine(SchemaName, tableName);
+
+            var textLines = File.ReadLines(path).ToList();
+
+            var index = textLines.IndexOf($"[{titleName}]");
+
+            textLines.RemoveAt(index + 1);
+            textLines.Insert(index + 1, data);
+            File.WriteAllLines(path, textLines);
+
+            return true;
         }
 
         public bool IsTableExist(string tableName)

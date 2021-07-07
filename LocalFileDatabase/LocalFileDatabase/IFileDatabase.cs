@@ -10,6 +10,8 @@
 
         bool IsTableExist(string tableName);
 
+        bool IsColumnNameExist(string schema, string tableName, string columnName);
+
         bool InserData(string tableName, string titleName, string data);
 
         bool UpdateData(string tableName, string titleName, string data);
