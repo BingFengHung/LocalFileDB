@@ -8,6 +8,8 @@
 
         bool CreateTable(string tableName);
 
+        bool IsTableExist(string tableName);
+
         bool InserData(string tableName);
 
         bool UpdateData(string tableName);
