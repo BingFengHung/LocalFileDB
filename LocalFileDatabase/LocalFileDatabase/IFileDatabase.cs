@@ -10,13 +10,13 @@
 
         bool IsTableExist(string tableName);
 
-        bool InserData(string tableName);
+        bool InserData(string tableName, string titleName, string data);
 
-        bool UpdateData(string tableName);
+        bool UpdateData(string tableName, string titleName, string data);
 
-        bool DeleteData(string tableName);
+        bool DeleteData(string tableName, string titleName);
 
-        bool SelectData(string tableName);
+        bool SelectData(string tableName, string titleName, out string data);
 
         bool CreateSchema(string tableName);
     }
