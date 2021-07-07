@@ -39,7 +39,19 @@ namespace LocalFileDatabase
 
         public bool CreateTable(string tableName)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var path = Path.Combine(SchemaName, tableName);
+
+                if (!IsTableExist(tableName))
+                    File.Create(path);
+
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         public bool DeleteData(string tableName)
@@ -65,6 +77,11 @@ namespace LocalFileDatabase
         public bool UpdateData(string tableName)
         {
             throw new NotImplementedException();
+        }
+
+        public bool IsTableExist(string tableName)
+        {
+            return File.Exists(Path.Combine(SchemaName, tableName));
         }
 
         #endregion
